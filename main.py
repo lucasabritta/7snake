@@ -45,20 +45,16 @@ def isNextStepViable(gridSize, snake, nextStep):
 	return isViable
 
 def isTrapped(gridSize, snake, snake_size):
-	trapped = False;
-	snake_size =- 1;
-	if (snake[snake_size] == '0 0'):
-		if ('0 1' in snake and '1 1' in snake and '1 0' in snake):
-			trapped = True;
-	elif (snake[snake_size] == '0 '+str(snake_size)):
-		if ('0 '+str(snake_size-1) in snake and '1 '+str(snake_size-1) in snake and '1 '+str(snake_size) in snake):
-			trapped = True;
-	elif (snake[snake_size] == str(snake_size)+' 0'):
-		if (str(snake_size-1)+' 0'in snake and str(snake_size-1)+' 1' in snake and str(snake_size)+' 1' in snake):
-			trapped = True;
-	elif (snake[snake_size] == str(snake_size)+' '+str(snake_size)):
-		if (str(snake_size-1)+' '+str(snake_size-1) in snake and str(snake_size-1)+' '+str(snake_size) in snake and str(snake_size)+' '+str(snake_size-1) in snake):
-			trapped = True;
+	snake_size -= 1;
+	trapped = True;
+	x, y = snake[snake_size].split(' ');
+	x = int(x);
+	y = int(y);
+	for i in range(-1, 1):
+		for j in range(-1, 1):
+			x1 = x + i if (x + i <= gridSize and x + i >= 0) else x;
+			y1 = y + j if (y + j <= gridSize and y + j >= 0) else y;
+			trapped = trapped and (str(x1)+' '+str(y1) in snake);
 	return trapped;
 
 def createSnake(grid, gridSize, snake_len):
@@ -83,18 +79,46 @@ def createSnake(grid, gridSize, snake_len):
 			return [0], 0;
 	return snake, value
 
+def isSnakeDifferent(snake1, snake2, snake_len):
+	different = True;
+	for j in range(0, snake_len-1):
+		if (snake1[j] in snake2):
+			different = False;
+	return different
+
+def solutionFounded(population, population_size, snake_len):
+	valueList = list(map(lambda l: l[0], population));
+	for y in range(0, population_size-1):
+		solutionList = [i for i, j in enumerate(valueList) if j == population[y][0]];
+		if (len(solutionList) > 1): # verify if have 2 or more snakes in population that have same value
+			for j in range(0, len(solutionList)-1):
+				if (isSnakeDifferent(population[solutionList[j]][1], population[solutionList[j+1]][1], snake_len)): #compare snake to see if they are not in same place
+					return True, [solutionList[j], solutionList[j+1]]
+	return False, [];
+
 snake_len = 7;
 fname = "dataTest/10x10.csv";
-population_size = 5;
-population = [[0 for x in range(2)] for y in range(population_size)];
+population_size = 100;
+population = [];
 
 gridSize = file_len(fname);
 gridSize -= 1;
 grid = readGrid(fname);
-for i in range (0, 500):
-	snake, value = createSnake(grid, gridSize, snake_len);
-	print(snake);
-	print(value);
+solutionList =[];
+solutionFound = False;
 
+while (solutionFound == False):
+	i = 0;
+	while (i < population_size):  #creating a population
+		snake, value = createSnake(grid, gridSize, snake_len);
+		if (value == 0):
+			i -= 1;
+		else:
+			population.append([value, snake]);
+		i += 1;
+	solutionFound, solutionList = solutionFounded(population, population_size, snake_len); #verify if the solution was founded
 
+print(population[solutionList[0]][0]); #print value of the solution
+for i in range(0, len(solutionList)): #print snake of the solution
+	print(population[solutionList[i]][1]);
 
