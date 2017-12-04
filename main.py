@@ -96,19 +96,56 @@ def solutionFounded(population, population_size, snake_len):
 					return True, [solutionList[j], solutionList[j+1]]
 	return False, [];
 
+def findBiggerAndSmaller(valueList):
+	bigger = smaller = valueList[0]; # save the value to search
+	biggerI = smallerI = 0; #save the index
+	for j in range(0, len(valueList)):
+		if (bigger < valueList[j]):
+			bigger = valueList[j];
+			biggerI = j;
+		if (smaller > valueList[j]):
+			smaller = valueList[j];
+			smallerI = j;
+	return biggerI, smallerI;
+
+def killPop(population, sizeOfKilling):
+	while (sizeOfKilling > 0):
+		valueList = list(map(lambda l: l[0], population));
+		bigger, smaller = findBiggerAndSmaller(valueList);
+		if (bigger > smaller and sizeOfKilling > 1):
+			population.pop(bigger);
+			population.pop(smaller);
+			sizeOfKilling -= 2;
+		elif(smaller > bigger and sizeOfKilling > 1):
+			population.pop(smaller);
+			population.pop(bigger);
+			sizeOfKilling -= 2;
+		else:
+			population.pop(bigger);
+			sizeOfKilling -= 1;
+	return population
+
+
 snake_len = 7;
 fname = "dataTest/10x10.csv";
-population_size = 100;
-population = [];
+population_size = 10;
+percentOfKilling = 20;
+popToKill = int(population_size * (percentOfKilling/100));
+
 
 gridSize = file_len(fname);
 gridSize -= 1;
 grid = readGrid(fname);
 solutionList =[];
 solutionFound = False;
+population = [];
+i = 0;
+iteration = 0;
 
 while (solutionFound == False):
-	i = 0;
+	if (i > 0):
+		population = killPop(population, popToKill);
+		i -= popToKill;
 	while (i < population_size):  #creating a population
 		snake, value = createSnake(grid, gridSize, snake_len);
 		if (value == 0):
@@ -117,8 +154,9 @@ while (solutionFound == False):
 			population.append([value, snake]);
 		i += 1;
 	solutionFound, solutionList = solutionFounded(population, population_size, snake_len); #verify if the solution was founded
+	iteration += 1;
 
 print(population[solutionList[0]][0]); #print value of the solution
 for i in range(0, len(solutionList)): #print snake of the solution
 	print(population[solutionList[i]][1]);
-
+print ('problem solved in ' + str(iteration) + ' iteration(s)');
