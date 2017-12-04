@@ -35,23 +35,28 @@ Solution:
 [grid_a]: /grida.png "Solucao"
 [grid_b]: /gridb.png "Solucao"
 
-# My solution::
+# My solution:
 This problem was solved using the concept of population of the genetic algorithm.
-This program works using the following steps.
-	1 - Fill the population with random snakes to the max allowed population size.
-	2 - Verify if in this population have 2 snakes that have same value and not share the same space.
-		2.1 - In positive case go to step 4.
-		2.2 - In negative case go to step 3.
-	3 - Kill a given amount of the population and go to step 1.
-	4 - finish the program and show the 2 snakes
+
+This program works using the following steps:
+
+	1. Fill the population with random snakes to the max allowed population size.
+	2. Verify if in this population have 2 snakes that have same value and not share the same space.
+		- In positive case go to step 4.
+		- In negative case go to step 3.
+	3. Kill a given amount of the population and go to step 1.
+	4. finish the program and show the 2 snakes
 
 This logic need an enhancement to be a real AG.
+
 The final logic has to be something like:
-	1 - Fill the population with random snakes to the max allowed population size.
-	2 - Verify if in this population have 2 snakes that have same value and not share the same space.
-		2.1 - In positive case go to step 5.
-		2.2 - In negative case go to step 3.
-	3 - Kill a given amount of the population.
-	4 - Merge the rest of snakes to create new snakes to fill the spaces and go to step 2.
-	5 - finish the program and show the 2 snakes
+
+	1. Fill the population with random snakes to the max allowed population size.
+	2. Verify if in this population have 2 snakes that have same value and not share the same space.
+		- In positive case go to step 5.
+		- In negative case go to step 3.
+	3. Kill a given amount of the population.
+	4. Merge the rest of snakes to create new snakes to fill the spaces and go to step 2.
+	5. finish the program and show the 2 snakes
+
 And also will need tests to find the best population size and best percent of population killing.
