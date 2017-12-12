@@ -56,7 +56,7 @@ The final logic has to be something like:
 		- In positive case go to step 5.
 		- In negative case go to step 3.
 	3. Kill a given amount of the population.
-	4. Merge the rest of snakes to create new snakes to fill the spaces and go to step 2.
+	4. Merge and/or mutate the rest of snakes to create new snakes to fill the spaces and go to step 2.
 	5. finish the program and show the 2 snakes
 
 And also will need tests to find the best population size and best percent of population killing.
